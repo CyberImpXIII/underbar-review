@@ -104,13 +104,22 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
     var output = [];
-    if(isSorted){
-      if(iterator){
-        var input = array.slice();
-        for(var i = 0; i < array.length; i++){
-          iterator(array[i])
-        }
+    if(iterator) {
+      var input = [];
+      for(var i = 0; i < array.length; i++) {
+        input.push(iterator(array[i]));
       }
+      console.log(input)
+    } else {
+      var input = array.slice();
+    }
+    if(isSorted){
+      // if(iterator){
+      //   var input = array.slice();
+      //   for(var i = 0; i < array.length; i++){
+      //     iterator(array[i])
+      //   }
+      // }
       for(var i = 0; i< array.length; i++){
         if(input[i]!==input[i+1]){
           output.push(array[i]);
