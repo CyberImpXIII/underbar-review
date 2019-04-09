@@ -7,6 +7,7 @@
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
   _.identity = function(val) {
+    return val;
   };
 
   /**
@@ -37,6 +38,7 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    return n === undefined ? array.length : n > array.length ? array : array.slice(array.length - n, array.length);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -45,6 +47,17 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+    if(Array.isArray(collection)){
+      var input = collection.slice();
+      for(var i = 0; i < input.length; i++){
+        iterator(input[i], i, collection);
+      }
+    }else{
+      var input = collection;
+      for(var keys in input){
+        iterator(input[keys], keys, collection);
+      }
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -66,16 +79,53 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var output = []
+    _.each(collection, function(value) {
+      if(test(value)) {
+        output.push(value);
+      }
+    });
+    return output;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var output = [];
+      _.each(collection, function(value){
+        if(!test(value)){
+          output.push(value);
+        }
+      })
+      return output;
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var output = [];
+    if(isSorted){
+      if(iterator){
+        var input = array.slice();
+        for(var i = 0; i < array.length; i++){
+          iterator(array[i])
+        }
+      }
+      for(var i = 0; i< array.length; i++){
+        if(input[i]!==input[i+1]){
+          output.push(array[i]);
+        }
+      }
+    }else{
+    var test = {};
+      for(var i =0; i<array.length;i++){
+        if(!test[input[i]]){
+          test[input[i]] = true;
+          output.push(array[i]);
+        }
+      }
+    }
+    return output;
   };
 
 
