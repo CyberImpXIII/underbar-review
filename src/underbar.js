@@ -267,16 +267,25 @@
     args.shift();
     for(var i = 0; i < args.length; i++) {
       for(var key in args[i]) {
-        if(obj[key] === undefined) {
           obj[key] = args[i][key];
-        }
       }
     }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = [...arguments];
+    args.shift();
+    for(var i = 0; i < args.length; i++) {
+      for(var key in args[i]) {
+        if(obj[key]===undefined){
+          obj[key] = args[i][key];
+        }
+      }
+    }
+    return obj;
   };
 
 
@@ -320,6 +329,15 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var memo = {};
+    return function(){
+      if(memo[JSON.stringify([...arguments])] !== undefined) {
+        return memo[JSON.stringify([...arguments])];
+      } else {
+        memo[JSON.stringify([...arguments])] = func(...arguments);
+        return memo[JSON.stringify([...arguments])]
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
